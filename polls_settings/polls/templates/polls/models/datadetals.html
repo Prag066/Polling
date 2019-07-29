@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>details</title>
+</head>
+<body>
+        {{details.question_text}}
+                <br>
+            {{details.pub_date}}
+        <hr>
+        <a method="post" action="">
+            {% csrf_token %}
+            {{form.as_p}}<a href="/polls/details/delete/{{details.id}}/"> delete </a>
+            <br>
+            <input type="submit" name="sub">
+        </form>
+</body>
+</html>

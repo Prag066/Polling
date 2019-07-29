@@ -1,20 +1,22 @@
-from django.shortcuts import render,get_object_or_404
+from django.shortcuts import render,get_object_or_404,redirect,HttpResponse
 from django.http import HttpResponse,HttpResponseRedirect
 from .models import Question,Choice
+from .forms import QuestionForm
 from django.template import loader
 from django.urls import reverse
 from django.views.generic import ListView, DetailView
 from django.utils import timezone
+from django.views.generic.edit import CreateView
 
-# def index(request):
-#     latest_question_list = Question.objects.order_by('-pub_date')[0:2]
-#     output = ', '.join([q.question_text for q in latest_question_list])
-#     template = loader.get_template('polls/index.html')
-#     context = {
-#         'latest_question_list':latest_question_list
-#     }
-#     return render(request,'polls/index.html',context)
-#     #return HttpResponse(template.render(context,request))
+def index(request):
+    latest_question_list = Question.objects.order_by('-pub_date')[0:2]
+    output = ', '.join([q.question_text for q in latest_question_list])
+    template = loader.get_template('polls/index.html')
+    context = {
+        'latest_question_list':latest_question_list
+    }
+    return render(request,'polls/index.html',context)
+    #return HttpResponse(template.render(context,request))
 
 class IndexView(ListView):
     template_name = 'polls/index.html'
@@ -69,3 +71,44 @@ def vote(request,question_id):
         selected_choice.votes += 1
         selected_choice.save()
         return HttpResponseRedirect(reverse('polls:results',args=(question.id,)))
+
+def success(request):
+    return render(request,'polls/success.html')
+
+class QuestionFormView(CreateView):
+    model = Question
+    template_name = 'polls/models/question.html'
+    fields = '__all__'
+    success_url = '/polls/success/'
+
+def Questionform(request):
+    if request.method == "POST":
+        form = QuestionForm(request.POST)
+        if form.is_valid():
+            form.save()
+    else:
+        form = QuestionForm()
+    return render(request,'polls/models/question.html',{"form":form})
+
+# display list of questions
+def qdata(request):
+    listdata = Question.objects.all()
+    return render(request,'polls/models/data.html',{"listdata":listdata})
+
+# display and update data
+def detailqus(request,id=None):
+    details = Question.objects.get(id=id)
+    if request.method=="POST":
+        form = QuestionForm(request.POST,instance=details)
+        if form.is_valid():
+            form.save()
+            return redirect('/polls/success/')
+    else:
+        form = QuestionForm(instance=details)
+    return render(request,'polls/models/datadetals.html',{"details":details,"form":form})
+
+# to delete a perticular data
+def detaildel(request,id=None):
+    details = Question.objects.get(id=id)
+    details.delete()
+    return render(request,'polls/models/datadetals.html',{"details":details})
