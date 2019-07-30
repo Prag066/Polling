@@ -25,5 +25,8 @@ urlpatterns = [
     #display details of model
     path('details/<int:id>/',views.detailqus),
     # delete model data
-    path('details/delete/<int:id>/',views.detaildel)
+    path('details/delete/<int:id>/',views.detaildel),
+    path('sign_upview/',views.sign_upview),
+    path('log_inview/',views.log_inview),
+    path('log_outview/',views.log_outview)
 ]

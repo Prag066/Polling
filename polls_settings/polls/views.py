@@ -1,12 +1,14 @@
 from django.shortcuts import render,get_object_or_404,redirect,HttpResponse
 from django.http import HttpResponse,HttpResponseRedirect
 from .models import Question,Choice
-from .forms import QuestionForm
+from .forms import QuestionForm,UserSignupForm,Log_inForm
 from django.template import loader
 from django.urls import reverse
 from django.views.generic import ListView, DetailView
 from django.utils import timezone
 from django.views.generic.edit import CreateView
+from django.contrib.auth.models import User
+from django.contrib.auth import login,logout,authenticate
 
 def index(request):
     latest_question_list = Question.objects.order_by('-pub_date')[0:2]
@@ -112,3 +114,33 @@ def detaildel(request,id=None):
     details = Question.objects.get(id=id)
     details.delete()
     return render(request,'polls/models/datadetals.html',{"details":details})
+
+def sign_upview(request):
+    if request.method == "POST":
+        form = UserSignupForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            User.objects.create_user(username=username,email=email,password=password)
+    else:
+        form = UserSignupForm()
+    return render(request,'auth/sign_upview.html',{"form":form})
+
+def log_inview(request):
+    if request.method == "POST":
+        form = Log_inForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(request,username=username,password=password)
+            if user is not None:
+                login(request,user)
+                return render(request,'base.html',{"user":user})
+    else:
+        form = Log_inForm()
+    return render(request,'auth/login.html',{"form":form})
+
+def log_outview(request):
+    logout(request)
+    return redirect('/polls/log_inview/')
