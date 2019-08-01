@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>article_data</title>
+</head>
+<body>
+        {% for i in article_data %}
+            {{i.headline}}<br>
+        {% for j in i.publications.all %}
+                {{j}}
+        {% endfor %}
+        {% endfor %}
+</body>
+</html>

@@ -28,5 +28,8 @@ urlpatterns = [
     path('details/delete/<int:id>/',views.detaildel),
     path('sign_upview/',views.sign_upview),
     path('log_inview/',views.log_inview),
-    path('log_outview/',views.log_outview)
+    path('log_outview/',views.log_outview),
+    path('profiledetail/',views.profiledetail),
+    path('article_data/',views.articledetail),
+    #path('createAP/',views.createAP),
 ]

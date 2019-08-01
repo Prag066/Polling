@@ -1,15 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>qus data</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+    {% block content %}
+
     {% for i in listdata %}
 
        <a href="/polls/details/{{i.id}}/">{{i}}</a>
 
         <br>
     {% endfor %}
-</body>
-</html>
+{% endblock %}
