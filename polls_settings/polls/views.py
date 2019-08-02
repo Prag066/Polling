@@ -10,6 +10,7 @@ from django.views.generic.edit import CreateView
 from django.contrib.auth.models import User
 from django.contrib.auth import login,logout,authenticate
 from django.core.mail import send_mail
+from django.urls import reverse
 
 def index(request):
     latest_question_list = Question.objects.order_by('-pub_date')[0:2]
@@ -164,3 +165,13 @@ def createAP(r):
     a.save()
     a.publications.add(p,p1)
     return render(r,'ap.html',{'a':a})
+
+class ProfileFormView(CreateView):
+    model = Profile
+    template_name = 'profiledata/profileform.html'
+    fields = '__all__'
+    success_url = '/polls/success/'
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        post.save()
+        return HttpResponse('success')

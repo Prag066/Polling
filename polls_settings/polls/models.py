@@ -30,6 +30,7 @@ class Choice(models.Model):
 
 class Profile(models.Model):
     user=models.OneToOneField(User,on_delete=models.CASCADE)
+    img = models.ImageField(blank=True,null=True)
     age= models.IntegerField(help_text='your age')
     dob= models.DateField('dob',help_text='yyyy/mm/dd')
     def __str__(self):

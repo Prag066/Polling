@@ -32,4 +32,5 @@ urlpatterns = [
     path('profiledetail/',views.profiledetail),
     path('article_data/',views.articledetail),
     #path('createAP/',views.createAP),
+    path('profileformview/',views.ProfileFormView.as_view()),
 ]
